@@ -92,7 +92,7 @@ void driveForward(uint8_t speedFlag){
         uint8_t* high_ball;
 
         breakup(313, high_ball, low_ball);
-        metal_i2c_transfer(i2c, PCA9685_LED0_ON_L,bufRead, high_ball,bufRead, low_ball);
+        metal_i2c_transfer(i2c, PCA9685_LED0_OFF_L,bufRead, high_ball,bufRead, low_ball);
 
     }
     if (speedFlag == 2){
@@ -100,7 +100,7 @@ void driveForward(uint8_t speedFlag){
         uint8_t* high_ball;
 
         breakup(315, high_ball, low_ball);
-        metal_i2c_transfer(i2c, PCA9685_LED0_ON_L,bufRead, high_ball,bufRead, low_ball);
+        metal_i2c_transfer(i2c, PCA9685_LED0_OFF_L,bufRead, high_ball,bufRead, low_ball);
 
     }
     if (speedFlag == 3){
