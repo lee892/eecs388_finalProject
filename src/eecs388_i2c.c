@@ -64,9 +64,14 @@ void set_up_I2C(){
 
 
 void breakup(int bigNum, uint8_t* low, uint8_t* high){
-    /*
-        Write Task 1 code here
-    */
+    uint16_t bigboy = bigNum;
+
+    uint8_t high_part = bigboy>>8;
+    uint8_t eight_bit_only = 255;
+    //this is 11111111 in binary
+    uint8_t low_part = bigboy&(eight_bit_only);
+    low = low_part;
+    high = high_part;
 }
 
 void steering(int angle){
@@ -82,9 +87,30 @@ void stopMotor(){
 }
 
 void driveForward(uint8_t speedFlag){
-    /*
-        Write Task 4 code here
-    */
+    if (speedFlag == 1){
+        uint8_t* low_ball;
+        uint8_t* high_ball;
+
+        breakup(313, high_ball, low_ball);
+        metal_i2c_transfer(i2c, PCA9685_LED0_ON_L,bufRead, high_ball,bufRead, low_ball);
+
+    }
+    if (speedFlag == 2){
+        uint8_t* low_ball;
+        uint8_t* high_ball;
+
+        breakup(315, high_ball, low_ball);
+        metal_i2c_transfer(i2c, PCA9685_LED0_ON_L,bufRead, high_ball,bufRead, low_ball);
+
+    }
+    if (speedFlag == 3){
+        uint8_t* low_ball;
+        uint8_t* high_ball;
+
+        breakup(317, high_ball, low_ball);
+        metal_i2c_transfer(i2c, PCA9685_LED0_ON_L,bufRead, high_ball,bufRead, low_ball);
+
+    }
 }
 
 void driveReverse(uint8_t speedFlag){
