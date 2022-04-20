@@ -75,15 +75,22 @@ void breakup(int bigNum, uint8_t* low, uint8_t* high){
 }
 
 void steering(int angle){
-    /*
-        Write Task 2 code here
-    */
+    u_int8_t *low;
+    u_int8_t *high;
+    int cycle = getServoCycle(angle);
+    breakup(cycle, high, low);
+    metal_i2c_transfer(i2c, PCA9685_LED0_ON_L, bufWrite, high, bufRead, low);
 }
 
 void stopMotor(){
     /*
         Write Task 3 code here
     */
+    u_int8_t *low;
+    u_int8_t *high;
+    breakup(280, high, low);
+    metal_i2c_transfer(i2c, PCA9685_LED0_ON_L, bufWrite, high, bufRead, low);
+    delay(2000);
 }
 
 void driveForward(uint8_t speedFlag){
@@ -117,6 +124,7 @@ void driveReverse(uint8_t speedFlag){
     /*
         Write task 5 code here
     */
+
 }
 
 
