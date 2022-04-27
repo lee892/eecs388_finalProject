@@ -190,7 +190,18 @@ void driveReverse(uint8_t speedFlag){
 int main()
 {
     set_up_I2C();
-
+    stopMotor();
+    steering(0);
+    delay(2000);
+    driveForward(1);
+    delay(2000);
+    steering(20);
+    delay(2000);
+    driveReverse(1);
+    delay(2000);
+    steering(0);
+    delay(2000);
+    stopMotor();
     /*
         Add function calls here to complete task 6
     */
