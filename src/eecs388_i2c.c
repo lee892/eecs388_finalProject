@@ -66,24 +66,24 @@ void set_up_I2C(){
 void breakup(int bigNum, uint8_t* low, uint8_t* high){
     uint16_t bigboy = bigNum;
 
-    uint8_t high_part = bigboy>>8;
+    uint8_t low_part = bigboy>>8;
     uint8_t eight_bit_only = 255;
     //this is 11111111 in binary
-    uint8_t low_part = bigboy&(eight_bit_only);
-    low = low_part;
-    high = high_part;
+    uint8_t high_part = bigboy&(eight_bit_only);
+    *low = low_part;
+    *high = high_part;
 }
 
 void steering(int angle){
-    u_int8_t *low;
-    u_int8_t *high;
+    u_int8_t low = 0;
+    u_int8_t high = 0;
     int cycle = getServoCycle(angle);
-    breakup(cycle, high, low);
-        bufWrite[0]= PCA9685_LED0_ON_L;
-        bufWrite[1] = low;
-        bufWrite[2] = high;
-        bufWrite[3] = 0;
-        bufWrite[4] = 0;
+    breakup(cycle, &high, &low);
+    bufWrite[0]= PCA9685_LED0_ON_L;
+    bufWrite[1] = low;
+    bufWrite[2] = high;
+    bufWrite[3] = 0;
+    bufWrite[4] = 0;
     metal_i2c_transfer(i2c, PCA9685_I2C_ADDRESS, bufWrite, 5, bufRead, 1);
 }
 
@@ -91,37 +91,38 @@ void stopMotor(){
     /*
         Write Task 3 code here
     */
-    u_int8_t *low;
-    u_int8_t *high;
-    breakup(280, high, low);
-        bufWrite[0]= PCA9685_LED0_ON_L;
-        bufWrite[1] = low;
-        bufWrite[2] = high;
-        bufWrite[3] = 0;
-        bufWrite[4] = 0;
+    u_int8_t low;
+    u_int8_t high;
+    breakup(280, &high, &low);
+    bufWrite[0]= PCA9685_LED0_ON_L;
+    bufWrite[1] = 0;
+    bufWrite[2] = 0;
+    bufWrite[3] = low;
+    bufWrite[4] = high;
     metal_i2c_transfer(i2c, PCA9685_I2C_ADDRESS, bufWrite, 5, bufRead, 1);
     delay(2000);
 }
 
 void driveForward(uint8_t speedFlag){
     if (speedFlag == 1){
-        uint8_t* low_ball;
-        uint8_t* high_ball;
-
-        breakup(313, high_ball, low_ball);
-        bufWrite[0]= PCA9685_LED0_ON_L;
+        uint8_t low_ball = 0;
+        uint8_t high_ball = 0;
+        printf("drive");
+        breakup(313, &high_ball, &low_ball);
+        printf("%d, %d", high_ball, low_ball);
+        bufWrite[0]= PCA9685_LED1_ON_L;
         bufWrite[1] = 0;
         bufWrite[2] = 0;
-        bufWrite[3] = *low_ball;
-        bufWrite[4] = *high_ball;
+        bufWrite[3] = low_ball;
+        bufWrite[4] = high_ball;
         metal_i2c_transfer(i2c, PCA9685_I2C_ADDRESS,bufWrite, 5,bufRead, 1);
 
     }
     if (speedFlag == 2){
-        uint8_t* low_ball;
-        uint8_t* high_ball;
+        uint8_t low_ball;
+        uint8_t high_ball;
 
-        breakup(315, high_ball, low_ball);
+        breakup(315, &high_ball, &low_ball);
         bufWrite[0]= PCA9685_LED0_ON_L;
         bufWrite[1] = 0;
         bufWrite[2] = 0;
@@ -130,10 +131,10 @@ void driveForward(uint8_t speedFlag){
         metal_i2c_transfer(i2c, PCA9685_I2C_ADDRESS,bufWrite, 5,bufRead, 1);
     }
     if (speedFlag == 3){
-        uint8_t* low_ball;
-        uint8_t* high_ball;
+        uint8_t low_ball;
+        uint8_t high_ball;
 
-        breakup(317, high_ball, low_ball);
+        breakup(317, &high_ball, &low_ball);
         bufWrite[0]= PCA9685_LED0_ON_L;
         bufWrite[1] = 0;
         bufWrite[2] = 0;
@@ -148,10 +149,10 @@ void driveReverse(uint8_t speedFlag){
         Write task 5 code here
     */
     if (speedFlag == 1){
-        uint8_t* low_ball;
-        uint8_t* high_ball;
-
-        breakup(267, high_ball, low_ball);
+        uint8_t low_ball;
+        uint8_t high_ball;
+        printf('drive');
+        breakup(267, &high_ball, &low_ball);
         bufWrite[0]= PCA9685_LED0_ON_L;
         bufWrite[1] = 0;
         bufWrite[2] = 0;
@@ -161,10 +162,10 @@ void driveReverse(uint8_t speedFlag){
 
     }
     if (speedFlag == 2){
-        uint8_t* low_ball;
-        uint8_t* high_ball;
+        uint8_t low_ball;
+        uint8_t high_ball;
 
-        breakup(265, high_ball, low_ball);
+        breakup(265, &high_ball, &low_ball);
         bufWrite[0]= PCA9685_LED0_ON_L;
         bufWrite[1] = 0;
         bufWrite[2] = 0;
@@ -173,10 +174,10 @@ void driveReverse(uint8_t speedFlag){
         metal_i2c_transfer(i2c, PCA9685_I2C_ADDRESS,bufWrite, 5,bufRead, 1);
     }
     if (speedFlag == 3){
-        uint8_t* low_ball;
-        uint8_t* high_ball;
+        uint8_t low_ball;
+        uint8_t high_ball;
 
-        breakup(263, high_ball, low_ball);
+        breakup(263, &high_ball, &low_ball);
         bufWrite[0]= PCA9685_LED0_ON_L;
         bufWrite[1] = 0;
         bufWrite[2] = 0;
@@ -189,19 +190,12 @@ void driveReverse(uint8_t speedFlag){
 
 int main()
 {
+    printf("gyftfytyu\n");
     set_up_I2C();
-    stopMotor();
-    steering(0);
     delay(2000);
     driveForward(1);
     delay(2000);
-    steering(20);
-    delay(2000);
-    driveReverse(1);
-    delay(2000);
-    steering(0);
-    delay(2000);
-    stopMotor();
+    printf("driving\n");
     /*
         Add function calls here to complete task 6
     */
