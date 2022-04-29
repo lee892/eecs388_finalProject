@@ -195,14 +195,15 @@ int main()
     delay(2000);
     printf("steering\n");
     stopMotor();
-    delay(2000);
-    steering(20);
+    steering(10);
     delay(2000);
     driveForward(1);
     delay(2000);
+    steering(20);
+    delay(2000);
     stopMotor();
     delay(2000);
-    //driveReverse(1);
+    driveReverse(1);
     delay(2000);
     steering(-20);
     delay(2000);
